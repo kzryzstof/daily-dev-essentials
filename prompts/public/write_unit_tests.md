@@ -6,7 +6,7 @@ Generate comprehensive unit tests for the provided class.
 
 Format: `MethodName_Scenario_ExpectedResult`
 
-Example: `GetUser_WhenIdIsValid_UserReturned`
+Example: `GetUser_IdIsValid_UserReturned`
 
 ## Test Structure
 
@@ -25,9 +25,10 @@ Use AAA pattern with section comments:
 
 ## Test Rules
 
-1. Keep tests minimal: no or few Arrange line, one Act line, one or more Assert lines
-2. Multiple assertions may indicate the test should be split
-3. Place reusable constants in the shared project
+1. Keep tests minimal: no or few Arrange lines, one Act line, one or more Assert lines
+2. Use constants directly in Act section without intermediate variable assignments
+3. Multiple assertions may indicate the test should be split
+4. Place reusable constants (including request objects) in the shared project for reusability across tests
 
 ## Required Coverage
 
