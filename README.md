@@ -1,4 +1,4 @@
-# Misc
+# Daily Dev Essentials
 
 A collection of miscellaneous code snippets, utilities, configurations, and prompts.
 
