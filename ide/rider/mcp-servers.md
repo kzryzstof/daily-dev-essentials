@@ -96,6 +96,13 @@ Place this file at the root of your project (`.github/mcp.json`) or in your glob
       "type": "stdio",
       "command": "npx",
       "args": ["-y", "@microsoft/m365-agents-mcp@latest"]
+    }, 
+    "atlassian": {
+       "type": "http",
+       "url": "https://mcp.atlassian.com/v1/mcp/authv2",
+       "headers": {
+          "Authorization": "Basic <email:api_token_base64>"
+       }
     }
   }
 }
@@ -238,6 +245,11 @@ This server is under active development. APIs and features may change. Suitable 
 brew install uv
 ```
 
+### Atlassian MCP — Basic Auth
+
+```bash
+echo -n "<user_email>:<api_token-read:work-write:work>" | base64
+```
 ---
 
 ## Useful Links

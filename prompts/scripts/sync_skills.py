@@ -49,8 +49,19 @@ def repo_root() -> Path:
 
 def discover_skill_sources(skills_root: Path) -> list[tuple[Path, str, set[str]]]:
     """Return (source path, destination name, ignored child names) for all skills."""
-    if not (skills_root / "SKILL.md").is_file():
-        raise FileNotFoundError(f"Missing root skill file: {skills_root / 'SKILL.md'}")
+    root_skill_children = {
+        child.name
+        for child in skills_root.iterdir()
+        if child.is_dir() and (child / "SKILL.md").is_file()
+    }
+    
+    # Only add root skill if SKILL.md exists
+    if (skills_root / "SKILL.md").is_file():
+        skill_sources: list[tuple[Path, str, set[str]]] = [
+            (skills_root, skills_root.name, root_skill_children)
+        ]
+    else:
+        skill_sources: list[tuple[Path, str, set[str]]] = []
 
     root_skill_children = {
         child.name
@@ -104,9 +115,10 @@ def install_to_target(
 def main() -> int:
     args = parse_args()
     root = repo_root()
+    
     skills_root = root / "skills"
     references_root = root / "references"
-
+    
     if not references_root.is_dir():
         raise FileNotFoundError(f"Missing references directory: {references_root}")
 
