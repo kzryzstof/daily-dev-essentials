@@ -1,5 +1,5 @@
 ---
-name: describe-pr
+name: github-describe-pr
 description: v1.1.0 - Reads a Jira ticket and the diff of a pull request, then produces a well-structured pull request title and description ready to paste into GitHub.
 ---
 

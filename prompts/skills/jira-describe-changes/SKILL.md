@@ -1,5 +1,5 @@
 ---
-name: describe-changes
+name: jira-describe-changes
 description: v1.4.0 - Reads a Jira ticket and the diff of a pull request, then produces a clear, neutral, high-level summary of what changed and why (using a Bug or Feature/Change template depending on ticket type) — without prescribing what to test or how — and posts it to the ticket's Development field as ADF via its resolved customfield key.
 ---
 
