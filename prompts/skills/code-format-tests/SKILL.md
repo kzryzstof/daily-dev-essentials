@@ -1,5 +1,5 @@
 ---
-name: format-tests
+name: code-format-tests
 description: v1.7.0 - Applies the Octelys unit test formatting guidelines to an existing or new C# test class — naming convention, AAA structure, fluent-chain formatting, control-flow formatting, mock setup placement, system-under-test instantiation, shared fixtures, (shared) assertion helpers, repetitive-access helpers, helper-method placement, and coverage checklist.
 ---
 
