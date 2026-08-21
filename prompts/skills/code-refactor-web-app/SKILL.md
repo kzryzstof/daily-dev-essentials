@@ -1,21 +1,25 @@
 ---
 name: code-refactor-web-app
-description: v0.1.0 — Refactors an existing ASP.NET Core web application or Web API toward the layered project structure defined by web-app-guidelines.md. Use when Codex needs to reorganize a .NET web solution, separate abstractions, application handlers, capability services, optional view models, and the presentation host, correct project-reference direction, or move misplaced controllers, endpoints, UI components, persistence, integrations, and composition code while preserving behavior and keeping builds and tests green.
+description: v0.1.1 — Refactors an existing ASP.NET Core web application or Web API toward the layered project structure defined by the shared web-application conventions. Use when Codex needs to reorganize a .NET web solution, separate abstractions, application handlers, capability services, optional view models, and the presentation host, correct project-reference direction, or move misplaced controllers, endpoints, UI components, persistence, integrations, and composition code while preserving behavior and keeping builds and tests green.
 ---
 
 # Refactor an ASP.NET Core Web Solution
 
-Refactor an existing ASP.NET Core solution to conform to
-[web-app-guidelines.md](references/web-app-guidelines.md) without changing its observable behavior.
+Refactor an existing ASP.NET Core solution to conform to the shared web-application conventions
+without changing its observable behavior.
+
+## Reference — read before editing
+
+Read `../references/code-web-app-conventions.md` completely before analyzing or editing. That path
+is relative to this `SKILL.md` after installation with `prompts/scripts/update-skills.py`. In this
+source repository, use `../../references/code-web-app-conventions.md`.
 
 ## Required context
 
-Before analyzing or editing:
+Identify the solution or repository root. If it cannot be inferred from the current workspace or
+the user's target, ask for it.
 
-1. Read `references/web-app-guidelines.md` completely.
-2. Identify the solution or repository root. If it cannot be inferred from the current workspace or the user's target, ask for it.
-
-Treat the guideline as a template:
+Treat the convention as a template:
 
 - Derive `{RootNamespace}`, `{WebHost}`, and `{Capability}` from the repository.
 - Do not rename projects merely to reproduce placeholder names.
@@ -97,7 +101,7 @@ Build an evidence-backed inventory from project files and source:
 
 Inspect every `.csproj` project reference and produce the current dependency graph. Do not infer dependency direction from folder names alone.
 
-### 4. Compare against the guideline
+### 4. Compare against the convention
 
 Classify each finding:
 
@@ -146,7 +150,7 @@ For every phase:
 8. Update project references, namespaces, DI registrations, internals visibility, and tests in the same phase.
 9. Build after the phase before continuing.
 
-Do not introduce a generic `Integration` or `Registry` project solely because it appears as an example in the guideline. Name capability projects for what they actually own.
+Do not introduce a generic `Integration` or `Registry` project solely because it appears as an example in the convention. Name capability projects for what they actually own.
 
 ### 7. Apply presentation rules conditionally
 
@@ -203,7 +207,7 @@ Leave changes in the working tree for review. Do not commit unless the user expl
 
 ## Hard constraints
 
-1. Read and apply the bundled guideline before acting.
+1. Read and apply the shared convention before acting.
 2. Preserve behavior and external contracts by default.
 3. Do not force every example project into every solution.
 4. Keep Blazor and all UI-specific guidance conditional.

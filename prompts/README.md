@@ -1,6 +1,7 @@
 # Prompt Skills
 
-This directory contains reusable skills for C# refactoring and common GitHub and Jira workflows.
+This directory contains reusable skills for C# and .NET maintenance and common GitHub and Jira
+workflows.
 Each skill lives in its own directory under `skills/`, with its entry-point instructions in a
 `SKILL.md` file.
 
@@ -13,7 +14,8 @@ Each skill lives in its own directory under `skills/`, with its entry-point inst
 | [`code-refactor-class`](skills/code-refactor-class/SKILL.md) | 0.5.0 | Refactors a C# class for consistent abstraction levels, focused private methods, meaningful names, and aligned XML documentation while preserving behavior and non-private signatures. |
 | [`code-refactor-comments`](skills/code-refactor-comments/SKILL.md) | 0.3.0 | Audits C# comments, removes narration and duplication, preserves non-obvious intent, and applies the shared comment conventions. |
 | [`code-refactor-tests`](skills/code-refactor-tests/SKILL.md) | 1.7.0 | Writes, formats, reviews, or refactors C# unit tests using the shared naming, AAA, setup, assertion, helper, and coverage conventions. |
-| [`code-refactor-web-app`](skills/code-refactor-web-app/SKILL.md) | 0.1.0 | Refactors an ASP.NET Core application toward the repository's layered web-application structure while preserving behavior and dependency direction. |
+| [`code-refactor-web-app`](skills/code-refactor-web-app/SKILL.md) | 0.1.1 | Refactors an ASP.NET Core application toward the repository's layered web-application structure while preserving behavior and dependency direction. |
+| [`code-upgrade-dotnet`](skills/code-upgrade-dotnet/SKILL.md) | 0.2.0-alpha | Coordinates a CPM-enabled solution's .NET runtime, language version, NuGet package, CI, and container upgrades. |
 
 ### GitHub workflows
 
@@ -32,7 +34,7 @@ Each skill lives in its own directory under `skills/`, with its entry-point inst
 
 ## How the skills fit together
 
-The diagram shows a typical delivery flow and the optional code-quality passes available during
+The diagram shows a typical delivery flow and the optional code-maintenance skills available during
 implementation. Solid arrows represent workflow progression. Dashed arrows represent manual
 handoffs or optional skill use; they do not imply that one skill automatically invokes another.
 
@@ -51,10 +53,11 @@ flowchart LR
   Implementation -.->|"refactor C# tests"| RefactorTests["code-refactor-tests<br/>(applies test conventions)"]
   Implementation -.->|"review C# comments"| RefactorComments["code-refactor-comments<br/>(applies comment conventions)"]
   Implementation -.->|"restructure an ASP.NET Core app"| RefactorWebApp["code-refactor-web-app<br/>(applies web-app conventions)"]
+  Implementation -.->|"upgrade a .NET solution"| UpgradeDotNet["code-upgrade-dotnet<br/>(coordinates runtime and package upgrades)"]
 
   classDef skill fill:#E8F5E9,stroke:#43A047,stroke-width:2px,color:#000000;
   classDef anchor fill:#E3F2FD,stroke:#1E88E5,stroke-width:2px,color:#000000,stroke-dasharray: 3 3;
-  class AddTicket,CreateBranch,DescribePr,DescribeChanges,CreateRelease,RefactorClass,RefactorTests,RefactorComments,RefactorWebApp skill;
+  class AddTicket,CreateBranch,DescribePr,DescribeChanges,CreateRelease,RefactorClass,RefactorTests,RefactorComments,RefactorWebApp,UpgradeDotNet skill;
   class Request,Implementation,PullRequest,Merge anchor;
 ```
 

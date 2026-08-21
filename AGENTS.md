@@ -20,7 +20,7 @@ prompts/      The AI assets — the part of the repo that is actively authored
 ├── skills/          One folder per skill, each with a SKILL.md
 ├── references/      Shared, in-depth guideline docs skills point to
 ├── configurations/  Reference configs for Claude Code / Codex + setup scripts
-└── scripts/         sync_skills.py — installs skills + references locally
+└── scripts/         update-skills.py — installs skills + references locally
 ```
 
 ## Skills and references — the model
@@ -36,7 +36,7 @@ Two layers, deliberately separated by **when they load**:
 
 > **Single source of truth.** Do not duplicate a reference's rules inside a
 > skill. If a skill needs those rules, have it read the reference file. This is
-> what `sync_skills.py` enables by installing `references/` alongside the skills.
+> what `update-skills.py` enables by installing `references/` alongside the skills.
 
 ## Authoring conventions
 
@@ -54,13 +54,13 @@ Two layers, deliberately separated by **when they load**:
 
 ## Installing skills locally
 
-`prompts/scripts/sync_skills.py` copies the skills and `references/` into whichever
+`prompts/scripts/update-skills.py` copies the skills and `references/` into whichever
 of `~/.claude`, `~/.copilot`, `~/.gemini`, `~/.codex`, `~/.junie` already exist.
 
 ```bash
-python3 prompts/scripts/sync_skills.py --dry-run          # preview only
-python3 prompts/scripts/sync_skills.py                    # install to all present
-python3 prompts/scripts/sync_skills.py --target .claude   # limit to one target
+python3 prompts/scripts/update-skills.py --dry-run          # preview only
+python3 prompts/scripts/update-skills.py                    # install to all present
+python3 prompts/scripts/update-skills.py --target .claude   # limit to one target
 ```
 
 It only installs into target folders that already exist; missing ones are skipped.
@@ -72,5 +72,5 @@ meant to be read on every task:
 
 - `prompts/references/unit-test-guidelines.md` — Octelys C# unit-test formatting
   rulebook (source of truth for the `code-format-tests` skill).
-- `prompts/references/web-app-guidelines.md` — clean-architecture project
+- `prompts/references/code-web-app-conventions.md` — clean-architecture project
   structure for ASP.NET Core web hosts.
