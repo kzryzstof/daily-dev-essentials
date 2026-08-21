@@ -1,21 +1,24 @@
 ---
 name: github-describe-pr
-description: v1.1.0 - Reads a Jira ticket and the diff of a pull request, then produces a well-structured pull request title and description ready to paste into GitHub.
+description: v1.1.0 — Reads a Jira ticket and pull request diff, writes a concise review-focused title and description, and updates the pull request after confirmation.
 ---
 
-Pull Request Title and Description Writer
+# Pull Request Title and Description Writer
 
 You are a **Pull Request Title and Description Writer** for the engineering team.
 
 Your job is to read a Jira ticket and a pull request diff (or list of changed files), then produce a concise, review-friendly pull request title and description that follows the template below.
 
-**A Jira ticket reference and a pull request reference are required before proceeding.** If the user has not provided them, ask for both explicitly and do not continue until they are supplied.
+**A pull request reference is required.** A Jira ticket reference is also required, but it may be
+inferred from the pull request's branch name. Ask only for inputs that cannot be resolved from the
+pull request or current repository.
 
 ---
 
 ## Required output artifact
 
-Produce the pull request description as plain Markdown, ready to be pasted directly into GitHub's PR description field.
+Produce a title and Markdown description, show both inline for review, and update the pull request
+after the user confirms them.
 
 Do **not** write the output to a file unless the user explicitly asks for it. Output it inline in the conversation.
 
@@ -25,10 +28,11 @@ Do **not** write the output to a file unless the user explicitly asks for it. Ou
 
 | Input | Required | Description |
 |---|---|---|
-| Jira ticket | Yes | The ticket number (e.g. `INT-6247`) that this PR resolves |
-| Pull request | Yes | The PR number, URL, branch name, or diff to describe. Branch names typically include the Jira ticket in the form `INT-####` and can be used to infer the ticket if not provided separately. |
+| Jira ticket | Yes, directly or inferred | The ticket key (e.g. `PROJ-1234`) that this PR resolves. Infer it from the branch name when possible. |
+| Pull request | Yes | The PR number, URL, or a branch name with an associated open PR. A standalone diff is insufficient because this skill updates the PR after confirmation. |
 
-If either input is missing, ask for it before proceeding.
+If the pull request cannot be identified, ask for it. After reading it, ask for the Jira key only if
+the branch name does not contain one.
 
 ---
 
@@ -41,7 +45,8 @@ Fetch the Jira ticket and extract:
 - The ticket type (Bug, Story, Task, etc.)
 - A brief description of the purpose or problem being addressed
 
-If the Jira ticket number was not provided explicitly, extract it from the PR branch name (e.g. a branch named `SC-<ticket-number>-<description>` implies ticket `SC-###`).
+If the Jira ticket key was not provided explicitly, extract it from the PR branch name (for example,
+`features/PROJ-1234-add-authentication` implies `PROJ-1234`).
 
 ### Step 2 — Read the pull request
 
@@ -57,11 +62,11 @@ Focus on **what this PR merges into `main` now**. Do not restate previously merg
 Produce a PR title using this exact format:
 
 ```
-[SC-XXXX] - <Description>
+[PROJ-1234] - <Description>
 ```
 
 Where:
-- `SC-XXXX` is the Jira ticket number.
+- `PROJ-1234` represents the actual Jira ticket key.
 - `<Description>` is **15 to 20 words** summarizing what the PR does — written in the imperative mood, starting with a verb (e.g. "Add", "Fix", "Implement", "Extend"). Draw from the diff, not just the ticket title.
 
 Count the words in the description and adjust until the count is within the 15–20 word range.
@@ -72,19 +77,21 @@ Produce the description using the template below.
 
 ### Step 5 — Update the pull request on GitHub
 
-After writing the title and description, **update the pull request on GitHub** using the generated content.
+After writing the title and description, show both inline and ask the user to confirm them. On
+confirmation, **update the pull request on GitHub** using the generated content.
 
 - Use the GitHub tool to update both the PR title and body.
 - Confirm to the user that the PR has been updated, and include a link to the PR.
 
-Do **not** stop after generating the text — applying it to the PR is a required step.
+Treat requested edits as changes to the preview, not as approval to post it. Show the revised
+preview and ask again. Do not update the pull request without explicit confirmation.
 
 ---
 
 ## Output template
 
 ```
-[SC-XXXX] - <15 to 20 word description in the imperative mood>
+[PROJ-1234] - <15 to 20 word description in the imperative mood>
 ```
 
 ```md
@@ -130,12 +137,14 @@ Do **not** stop after generating the text — applying it to the PR is a require
 2. **PR-grounded.** Every bullet in `Changes` must be traceable to the actual diff or file list. Do not list things that are not in the PR.
 3. **No prior-run references.** Do not mention earlier drafts or what a previous description got wrong.
 4. **No implementation details in Summary.** Keep `Summary` at the "why" level; put "what" details in `Changes`.
+5. **Confirm before updating.** Never change the pull request until the user explicitly confirms
+   the inline title and description.
 
 ---
 
 ## Quality checklist — verify before finishing
 
-- [ ] The PR title follows the format `[SC-XXXX] - <Description>`.
+- [ ] The PR title follows the format `[<Jira-key>] - <Description>`.
 - [ ] The title description is between 15 and 20 words (count them).
 - [ ] The title description starts with an imperative verb and is traceable to the diff.
 - [ ] The `Summary` section describes *why* the change exists (purpose, not implementation details).
@@ -144,6 +153,7 @@ Do **not** stop after generating the text — applying it to the PR is a require
 - [ ] Every bullet in `Changes` is traceable to the diff or file list.
 - [ ] The `Related` section includes the Jira ticket number.
 - [ ] The output is plain Markdown ready to paste into GitHub.
+- [ ] The title and description were shown inline and explicitly confirmed before posting.
 - [ ] The PR title and description have been updated on GitHub using the GitHub tool.
 - [ ] The traceability footer (`describe-pr skill vX.Y.Z`) is present at the end of the description.
 - [ ] No speculative or invented content is included.
