@@ -5,7 +5,6 @@
 This solution is an ASP.NET Core web host. It may expose a Web API, serve a user interface, or do both. It follows a layered, clean-architecture-inspired design that separates domain contracts, application use cases, infrastructure services, and presentation concerns.
 
 The web project is the composition root. It registers every implementation with dependency injection and exposes the application's entry points, such as controllers, minimal API endpoints, or optional UI components. Presentation code does not access databases or external systems directly.
-The web project is the composition root. It registers every implementation with dependency injection and exposes the application's entry points, such as controllers, minimal API endpoints, or optional UI components. Presentation code does not access databases or external systems directly.
 
 ## Solution Structure
 
@@ -65,7 +64,7 @@ The placeholders used below are:
 │   │   ├── Program.cs
 │   │   └── appsettings.json
 │   │
-│   └── {RootNamespace}.AppHost/
+│   └── {RootNamespace}.AppHost/                # Optional: .NET Aspire orchestration
 │
 ├── test/
 │   ├── {RootNamespace}.Abstractions.UnitTests/
@@ -246,18 +245,14 @@ dependencies after it.
 ## Dependency Rules
 
 ```text
-Controllers / API endpoints ────────────────┐
-                                            ├──▶ Application handlers
-Optional UI components ──▶ optional ViewModels ────────────┘
-                                                      │
-                                                      ▼
-                                                Abstractions
-                                                      ▲
-                  Services.{Capability A} ─────────────┤
-                  Services.{Capability B} ─────────────┤
-                  Services.{Capability C} ─────────────┘
+Controllers / API endpoints ───────────────▶ Application ─────────▶ Abstractions
+Optional UI components ─▶ optional ViewModels ──────────┘
 
-Web host references and composes all projects.
+Services.{Capability A} ──────────────────────────────────────────▶ Abstractions
+Services.{Capability B} ──────────────────────────────────────────▶ Abstractions
+Services.{Capability C} ──────────────────────────────────────────▶ Abstractions
+
+Web host ─▶ composes Application, capability services, and optional ViewModels
 ```
 
 - `Abstractions` is the common contract layer.
@@ -300,7 +295,7 @@ When the host also serves an interactive UI, a typical UI operation follows this
 2. The component delegates state and behavior to a view model when that pattern is used.
 3. The component or view model dispatches an application request.
 4. The application and infrastructure layers perform the operation.
-5. The presentation state is updated and the UI framework rerenders the affected view.
+5. The presentation state is updated and the UI framework re-renders the affected view.
 
 ## Placement Guidelines
 
